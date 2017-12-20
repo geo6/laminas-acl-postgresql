@@ -1,5 +1,5 @@
 {
-    "name": "geo6/-acl-postgresql",
+    "name": "geo6/zend-acl-postgresql",
     "description": "Zend Permissions ACL with PostgreSQL",
     "type": "library",
     "require": {
