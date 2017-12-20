@@ -1,0 +1,17 @@
+{
+    "name": "geo6/-acl-postgresql",
+    "description": "Zend Permissions ACL with PostgreSQL",
+    "type": "library",
+    "require": {
+        "zendframework/zend-authentication": "^2.5",
+        "zendframework/zend-db": "^2.9",
+        "zendframework/zend-permissions-acl": "^2.6"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Jonathan Beliën",
+            "email": "jbe@geo6.be"
+        }
+    ]
+}
