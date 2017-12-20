@@ -13,5 +13,10 @@
             "name": "Jonathan Beliën",
             "email": "jbe@geo6.be"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Geo6\\": "src/"
+        }
+    }
 }
