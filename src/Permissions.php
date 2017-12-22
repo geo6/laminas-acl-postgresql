@@ -1,11 +1,14 @@
 <?php
+namespace Geo6;
+
 use Zend\Authentication\AuthenticationService;
 use Zend\Db\Adapter\Adapter as DbAdapter;
+use Zend\Log\Logger;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 
-namespace Geo6;
+use Log;
 
 class Permissions {
   private $dbAdapter = NULL;
@@ -117,11 +120,11 @@ class Permissions {
       if ($is_allowed !== TRUE && $relog === TRUE) {
         $auth = new AuthenticationService();
 
-        /*if ($auth->hasIdentity()) {
-          Log::write('login', 'Access to resource "{resource}" is denied for user "{login}".', array( 'resource' => $resource, 'login' => $auth->getIdentity() ), Zend\Log\Logger::WARN);
+        if ($auth->hasIdentity()) {
+          Log::write(LOGPATH.'/login.log', 'Access to resource "{resource}" is denied for user "{login}".', array( 'resource' => $resource, 'login' => $auth->getIdentity() ), Logger::WARN);
         } else {
-          Log::write('login', 'Access to resource "{resource}" is denied : no user logged in.', array( 'resource' => $resource ), Zend\Log\Logger::WARN);
-        }*/
+          Log::write(LOGPATH.'/login.log', 'Access to resource "{resource}" is denied : no user logged in.', array( 'resource' => $resource ), Logger::WARN);
+        }
 
         $dbAdapter = new DbAdapter([
           'driver'   => 'Pgsql',
@@ -143,7 +146,7 @@ class Permissions {
 
       return $is_allowed;
     } catch (Exception $e) {
-      //Log::write('login', $e->getMessage(), array(), Zend\Log\Logger::ERR);
+      Log::write(LOGPATH.'/login.log', $e->getMessage(), array(), Logger::ERR);
       if ($relog === TRUE) {
         header('Location: /index.php');
         exit();
