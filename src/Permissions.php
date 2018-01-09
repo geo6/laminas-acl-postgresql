@@ -1,6 +1,6 @@
 <?php
 
-namespace Geo6;
+namespace Geo6\Zend\Permissions;
 
 use Log;
 use Zend\Authentication\AuthenticationService;
