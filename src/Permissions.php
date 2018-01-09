@@ -2,7 +2,7 @@
 
 namespace Geo6\Zend\Permissions;
 
-use Log;
+use Geo6\Zend\Log\Log;
 use Zend\Authentication\AuthenticationService;
 use Zend\Db\Adapter\Adapter as DbAdapter;
 use Zend\Log\Logger;
