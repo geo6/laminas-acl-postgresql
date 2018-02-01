@@ -12,7 +12,7 @@
         "zendframework/zend-session": "^2.8",
         "geo6/zend-log-filesystem": "dev-master"
     },
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Jonathan Beliën",
