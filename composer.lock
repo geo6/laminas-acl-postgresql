@@ -43,12 +43,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/geo6/zend-log-filesystem.git",
-                "reference": "b6ff6e3758c3129faf21a20b337c60bbe43bcd7c"
+                "reference": "ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geo6/zend-log-filesystem/zipball/b6ff6e3758c3129faf21a20b337c60bbe43bcd7c",
-                "reference": "b6ff6e3758c3129faf21a20b337c60bbe43bcd7c",
+                "url": "https://api.github.com/repos/geo6/zend-log-filesystem/zipball/ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3",
+                "reference": "ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0"
+                "GPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -73,7 +73,7 @@
                 }
             ],
             "description": "Zend Log stored in a file",
-            "time": "2018-01-09T10:57:49+00:00"
+            "time": "2018-02-01T10:12:21+00:00"
         },
         {
             "name": "psr/container",
@@ -535,16 +535,16 @@
         },
         {
             "name": "zendframework/zend-session",
-            "version": "2.8.4",
+            "version": "2.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-session.git",
-                "reference": "9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a"
+                "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a",
-                "reference": "9338f1ae483bcc18cc3b6c0347c8ba4f448b3e2a",
+                "url": "https://api.github.com/repos/zendframework/zend-session/zipball/2cfd90e1a2f6b066b9f908599251d8f64f07021b",
+                "reference": "2cfd90e1a2f6b066b9f908599251d8f64f07021b",
                 "shasum": ""
             },
             "require": {
@@ -552,14 +552,11 @@
                 "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
                 "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
-            "conflict": {
-                "phpunit/phpunit": ">=6.5.0"
-            },
             "require-dev": {
                 "container-interop/container-interop": "^1.1",
                 "mongodb/mongodb": "^1.0.1",
                 "php-mock/php-mock-phpunit": "^1.1.2 || ^2.0",
-                "phpunit/phpunit": "^5.7.5 || ^6.0.13",
+                "phpunit/phpunit": "^5.7.5 || >=6.0.13 <6.5.0",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-db": "^2.7",
@@ -601,7 +598,7 @@
                 "session",
                 "zf"
             ],
-            "time": "2018-01-31T17:38:47+00:00"
+            "time": "2018-02-22T16:33:54+00:00"
         },
         {
             "name": "zendframework/zend-stdlib",
