@@ -1,10 +1,8 @@
-# Installation
+# Install PostgreSQL
 
-# PostgreSQL
+<https://www.postgresql.org/download/>
 
-<https://www.postgresql.org/>
-
-## Create tables
+# Create tables
 
 ```
 CREATE SCHEMA "access";
