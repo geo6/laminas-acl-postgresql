@@ -27,6 +27,8 @@ ALTER TABLE "access"."role"
   ADD CONSTRAINT "role_id" PRIMARY KEY ("id"),
   ADD CONSTRAINT "role_name" UNIQUE ("name");
 
+INSERT INTO "role" ("name", "priority") VALUES ('admin', '9');
+
 CREATE TABLE "access"."role_resource" (
   "id_role" integer NOT NULL,
   "id_resource" integer NOT NULL,

@@ -39,6 +39,9 @@ See [INSTALL.md](./INSTALL.md)
 | name | Name of the role |
 | priority | `int` Priority of the resource - Rules will be applied following the priority |
 
+A "special" role is created by default : `admin` !  
+This role will have automatically access to every new resource created.
+
 #### Table `user`
 
 | Column name | Column description |
