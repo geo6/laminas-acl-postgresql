@@ -9,76 +9,102 @@ use Zend\Log\Logger;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\TableIdentifier;
 
 class Permissions
 {
-    private $dbAdapter = null;
     public $acl = null;
+    private $dbAdapter = null;
+    private $schema = null;
     private $login = null;
+    private $logfile = null;
 
-    public function __construct()
+    public function __construct(DbAdapter $dbAdapter, string $schema = null, string $logfile = null)
     {
         $auth = new AuthenticationService();
-        $this->login = (!is_null($auth->getIdentity()) ? $auth->getIdentity() : 'anonymous');
+        $this->login = ($auth->hasIdentity() ? $auth->getIdentity() : 'anonymous');
 
-        $this->dbAdapter = new DbAdapter([
-      'driver'   => 'Pgsql',
-      'hostname' => SQL_SERVER,
-      'database' => strtolower(substr(SQL_LOGIN, strpos(SQL_LOGIN, '_') + 1)),
-      'username' => strtolower(SQL_LOGIN),
-      'password' => SQL_PASSWORD,
-    ]);
-        $this->dbAdapter->query(
-      'SET search_path TO access;',
-      DbAdapter::QUERY_MODE_EXECUTE
-    );
+        $this->logfile = $logfile;
+
+        $this->dbAdapter = $dbAdapter;
+        $this->schema = $schema;
 
         $this->acl = new Acl();
 
-        $q = $this->dbAdapter->query('SELECT "name" FROM "role" ORDER BY "name"', DbAdapter::QUERY_MODE_EXECUTE);
-        while ($r = $q->current()) {
-            $this->acl->addRole(new Role($r->name));
-            $q->next();
-            if ($q->valid() !== true) {
-                break;
-            }
+        $sql = new Sql($this->dbAdapter);
+
+        // Roles
+        $select = $sql->select(new TableIdentifier('role', $this->schema));
+        $select->columns(['name']);
+        $select->order(['name']);
+
+        $roles = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
+        foreach ($roles as $role) {
+            $this->acl->addRole(new Role($role->name));
         }
 
+        // Apply roles to user
+        $select = $sql->select(new TableIdentifier('user', $this->schema));
+        $select->join(new TableIdentifier('user_role', $this->schema), 'user.id = user_role.id_user', []);
+        $select->join(new TableIdentifier('role', $this->schema), 'user_role.id_role = role.id', ['name']);
+        $select->columns([]);
+        $select->where(['user.login' => $this->login]);
+        $select->order(['role.priority']);
+
         $parents = [];
-        $q = $this->dbAdapter->query('SELECT r."name" FROM "user" u JOIN "user_role" ur ON u."id" = ur."id_user" JOIN "role" r ON ur."id_role" = r."id" WHERE u."login" = $1 ORDER BY r."priority" ASC', [$this->login]);
-        while ($r = $q->current()) {
-            $parents[] = $r->name;
-            $q->next();
-            if ($q->valid() !== true) {
-                break;
-            }
+        $roles = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
+        foreach ($roles as $role) {
+            $parents[] = $role->name;
         }
         $this->acl->addRole(new Role($this->login), $parents);
 
-        $q = $this->dbAdapter->query('SELECT "name", "public" FROM "resource" ORDER BY "name"', DbAdapter::QUERY_MODE_EXECUTE);
-        while ($r = $q->current()) {
-            $this->acl->addResource(new Resource($r->name));
-            if ($r->public === 't') {
-                $this->acl->allow($this->login, $r->name, 'connect');
-            }
+        // Resources
+        $select = $sql->select(new TableIdentifier('resource', $this->schema));
+        $select->columns(['name', 'public']);
+        $select->order(['name']);
 
-            $q->next();
-            if ($q->valid() !== true) {
-                break;
+        $resources = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
+        foreach ($resources as $resource) {
+            $this->acl->addResource(new Resource($resource->name));
+
+            if ($resource->public === true) {
+                $this->acl->allow($this->login, $resource->name, 'connect');
             }
         }
 
-        $q = $this->dbAdapter->query('SELECT rr."locked", ro."name" AS "role_name", re."name" AS "resource_name", re."locked" AS "resource_locked" FROM "role_resource" rr JOIN "role" ro ON rr."id_role" = ro."id" JOIN "resource" re ON rr."id_resource" = re."id"', DbAdapter::QUERY_MODE_EXECUTE);
-        while ($r = $q->current()) {
-            if ($r->locked !== 't' && $r->resource_locked !== 't') {
-                $this->acl->allow($r->role_name, $r->resource_name, ($r->role_name !== 'admin' ? 'connect' : null));
-            } else {
-                $this->acl->deny($r->role_name, $r->resource_name);
-            }
+        // Permissions
+        $select = $sql->select(new TableIdentifier('role_resource', $this->schema));
+        $select->join(
+            new TableIdentifier('role', $this->schema),
+            'role_resource.id_role = role.id',
+            [
+                'role_name' => 'name'
+            ]
+        );
+        $select->join(
+            new TableIdentifier('resource', $this->schema),
+            'role_resource.id_resource = resource.id',
+            [
+                'resource_name' => 'name',
+                'resource_locked' => 'locked'
+            ]
+        );
+        $select->columns(['locked']);
 
-            $q->next();
-            if ($q->valid() !== true) {
-                break;
+        $permissions = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
+        foreach ($permissions as $permission) {
+            if ($permission->locked === false && $permission->resource_locked === false) {
+                $this->acl->allow(
+                    $permission->role_name,
+                    $permission->resource_name,
+                    ($permission->role_name !== 'admin' ? 'connect' : null)
+                );
+            } else {
+                $this->acl->deny(
+                    $permission->role_name,
+                    $permission->resource_name
+                );
             }
         }
     }
@@ -105,22 +131,32 @@ class Permissions
 
     public function getRole($r)
     {
+        $sql = new Sql($this->dbAdapter);
+
+        $select = $sql->select(new TableIdentifier('role', $this->schema));
         if (is_int($r)) {
-            $q = $this->dbAdapter->query('SELECT * FROM "role" WHERE "id" = $1', [$r]);
+            $select->where(['id' => $r]);
         } else {
-            $q = $this->dbAdapter->query('SELECT * FROM "role" WHERE "name" = $1', [$r]);
+            $select->where(['name' => $r]);
         }
+
+        $q = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
 
         return $q->current();
     }
 
     public function getResource($r)
     {
+        $sql = new Sql($this->dbAdapter);
+
+        $select = $sql->select(new TableIdentifier('resource', $this->schema));
         if (is_int($r)) {
-            $q = $this->dbAdapter->query('SELECT * FROM "resource" WHERE "id" = $1', [$r]);
+            $select->where(['id' => $r]);
         } else {
-            $q = $this->dbAdapter->query('SELECT * FROM "resource" WHERE "name" = $1', [$r]);
+            $select->where(['name' => $r]);
         }
+
+        $q = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
 
         return $q->current();
     }
@@ -130,66 +166,47 @@ class Permissions
         return $this->acl->inheritsRole(new Role($this->login), $r);
     }
 
-    public function isAllowed($resource, $privilege = null, $relog = false)
+    public function isAllowed($resource, $privilege = null)
     {
-        if (is_bool($privilege)) {
-            $relog = $privilege;
-            $privilege = 'connect';
-        }
-
-        if (!in_array(substr($resource, 0, strpos($resource, '-')), ['home', 'tools', 'app'])) {
-            $resource = 'app-'.$resource;
-        }
-
         try {
-            if (!is_null($privilege)) {
-                $is_allowed = $this->acl->isAllowed($this->login, $resource, $privilege);
-            } else {
-                $is_allowed = $this->acl->isAllowed($this->login, $resource, 'connect');
-            }
+            $is_allowed = $this->acl->isAllowed($this->login, $resource, $privilege ?? 'connect');
 
-            if ($is_allowed !== true && $relog === true) {
-                $auth = new AuthenticationService();
-
-                if ($auth->hasIdentity()) {
-                    Log::write(LOGPATH.'/login.log', 'Access to resource "{resource}" is denied for user "{login}".', ['resource' => $resource, 'login' => $auth->getIdentity()], Logger::WARN);
+            if ($is_allowed !== true && !is_null($this->logfile)) {
+                if ($this->login !== 'anonymous') {
+                    Log::write(
+                        $this->logfile,
+                        'Access to resource "{resource}" is denied for user "{login}".',
+                        [
+                            'resource' => $resource,
+                            'login' => $auth->getIdentity()
+                        ],
+                        Logger::WARN
+                    );
                 } else {
-                    Log::write(LOGPATH.'/login.log', 'Access to resource "{resource}" is denied : no user logged in.', ['resource' => $resource], Logger::WARN);
+                    Log::write(
+                        $this->logfile,
+                        'Access to resource "{resource}" is denied : no user logged in.',
+                        [
+                            'resource' => $resource
+                        ],
+                        Logger::WARN
+                    );
                 }
-
-                $dbAdapter = new DbAdapter([
-          'driver'   => 'Pgsql',
-          'hostname' => SQL_SERVER,
-          'database' => strtolower(substr(SQL_LOGIN, strpos(SQL_LOGIN, '_') + 1)),
-          'username' => strtolower(SQL_LOGIN),
-          'password' => SQL_PASSWORD,
-        ]);
-                $dbAdapter->query(
-          'SET search_path TO access;',
-          DbAdapter::QUERY_MODE_EXECUTE
-        );
-                $q = $dbAdapter->query('SELECT "url" FROM "resource" WHERE "name" = $1 LIMIT 1', [$resource]);
-                $r = $q->current();
-
-                header('Location: /index.php?redirect_to='.urlencode($r->url).($auth->hasIdentity() ? '' : '&nologin'));
-                exit();
             }
 
             return $is_allowed;
         } catch (Exception $e) {
-            Log::write(LOGPATH.'/login.log', $e->getMessage(), [], Logger::ERR);
-            if ($relog === true) {
-                header('Location: /index.php');
-                exit();
+            if (!is_null($this->logfile)) {
+                Log::write($this->logfile, $e->getMessage(), [], Logger::ERR);
             }
 
             return false;
         }
     }
 
-    public function isGranted($resource, $relog = false)
+    public function isGranted($resource)
     {
-        return $this->isAllowed($resource, $relog);
+        return $this->isAllowed($resource);
     }
 
     public function allowPrivilege($role, $resource, $privileges)
