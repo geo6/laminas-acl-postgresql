@@ -5,12 +5,12 @@ namespace Geo6\Zend\Permissions;
 use Geo6\Zend\Log\Log;
 use Zend\Authentication\AuthenticationService;
 use Zend\Db\Adapter\Adapter as DbAdapter;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\TableIdentifier;
 use Zend\Log\Logger;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\TableIdentifier;
 
 class Permissions
 {
@@ -79,15 +79,15 @@ class Permissions
             new TableIdentifier('role', $this->schema),
             'role_resource.id_role = role.id',
             [
-                'role_name' => 'name'
+                'role_name' => 'name',
             ]
         );
         $select->join(
             new TableIdentifier('resource', $this->schema),
             'role_resource.id_resource = resource.id',
             [
-                'resource_name' => 'name',
-                'resource_locked' => 'locked'
+                'resource_name'   => 'name',
+                'resource_locked' => 'locked',
             ]
         );
         $select->columns(['locked']);
@@ -178,7 +178,7 @@ class Permissions
                         'Access to resource "{resource}" is denied for user "{login}".',
                         [
                             'resource' => $resource,
-                            'login' => $auth->getIdentity()
+                            'login'    => $auth->getIdentity(),
                         ],
                         Logger::WARN
                     );
@@ -187,7 +187,7 @@ class Permissions
                         $this->logfile,
                         'Access to resource "{resource}" is denied : no user logged in.',
                         [
-                            'resource' => $resource
+                            'resource' => $resource,
                         ],
                         Logger::WARN
                     );
