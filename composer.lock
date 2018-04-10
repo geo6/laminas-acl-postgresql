@@ -43,12 +43,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/geo6/zend-log-filesystem.git",
-                "reference": "ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3"
+                "reference": "07dbd1d197373880649930a338dbbee131062621"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geo6/zend-log-filesystem/zipball/ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3",
-                "reference": "ea3997a8a58a3e6abc8eb8a9d60aa944d0f21bf3",
+                "url": "https://api.github.com/repos/geo6/zend-log-filesystem/zipball/07dbd1d197373880649930a338dbbee131062621",
+                "reference": "07dbd1d197373880649930a338dbbee131062621",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
                 }
             ],
             "description": "Zend Log stored in a file",
-            "time": "2018-02-01T10:12:21+00:00"
+            "time": "2018-02-23T11:26:27+00:00"
         },
         {
             "name": "psr/container",
@@ -235,16 +235,16 @@
         },
         {
             "name": "zendframework/zend-db",
-            "version": "2.9.2",
+            "version": "2.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-db.git",
-                "reference": "1651abb1b33fc8fbd2d78ff9e2abb526cc2cf666"
+                "reference": "5b4f2c42f94c9f7f4b2f456a0ebe459fab12b3d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/1651abb1b33fc8fbd2d78ff9e2abb526cc2cf666",
-                "reference": "1651abb1b33fc8fbd2d78ff9e2abb526cc2cf666",
+                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/5b4f2c42f94c9f7f4b2f456a0ebe459fab12b3d9",
+                "reference": "5b4f2c42f94c9f7f4b2f456a0ebe459fab12b3d9",
                 "shasum": ""
             },
             "require": {
@@ -289,7 +289,7 @@
                 "db",
                 "zf"
             ],
-            "time": "2017-12-11T14:57:52+00:00"
+            "time": "2018-04-09T13:21:36+00:00"
         },
         {
             "name": "zendframework/zend-eventmanager",
