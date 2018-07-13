@@ -178,7 +178,7 @@ class Permissions
                         'Access to resource "{resource}" is denied for user "{login}".',
                         [
                             'resource' => $resource,
-                            'login'    => $auth->getIdentity(),
+                            'login'    => $this->login,
                         ],
                         Logger::WARN
                     );
