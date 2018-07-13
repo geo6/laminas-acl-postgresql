@@ -94,7 +94,7 @@ class Permissions
 
         $permissions = $this->dbAdapter->query($sql->buildSqlString($select), DbAdapter::QUERY_MODE_EXECUTE);
         foreach ($permissions as $permission) {
-            if ($permission->locked === false && $permission->resource_locked === false) {
+            if (($permission->locked === false || $permission->locked === 'f') && ($permission->resource_locked === false || $permission->resource_locked === 'f')) {
                 $this->acl->allow(
                     $permission->role_name,
                     $permission->resource_name,
