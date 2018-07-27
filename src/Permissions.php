@@ -25,7 +25,7 @@ use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 
 /**
- * Enable the use of Zend Framework ACL using PostgreSQL
+ * Enable the use of Zend Framework ACL using PostgreSQL.
  *
  * @author Jonathan Beliën <jbe@geo6.be>
  *
@@ -175,7 +175,7 @@ class Permissions
     }
 
     /**
-     * Returns true if and only if the Role exists in the registry
+     * Returns true if and only if the Role exists in the registry.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string $role
      *
@@ -187,7 +187,7 @@ class Permissions
     }
 
     /**
-     * Returns true if and only if the Resource exists in the ACL
+     * Returns true if and only if the Resource exists in the ACL.
      *
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
      *
@@ -199,7 +199,7 @@ class Permissions
     }
 
     /**
-     * Returns the identified Role
+     * Returns the identified Role.
      *
      * @param int|string $role
      */
@@ -223,7 +223,7 @@ class Permissions
     }
 
     /**
-     * Returns the identified Resource
+     * Returns the identified Resource.
      *
      * @param int|string $role
      */
@@ -247,7 +247,7 @@ class Permissions
     }
 
     /**
-     * Returns true if and only if current user inherits from $role
+     * Returns true if and only if current user inherits from $role.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string $role
      *
@@ -259,7 +259,7 @@ class Permissions
     }
 
     /**
-     * Returns true if and only if the current user has access to the Resource
+     * Returns true if and only if the current user has access to the Resource.
      *
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string                                                 $privilege
@@ -320,7 +320,7 @@ class Permissions
     }
 
     /**
-     * Adds an "allow" rule to the ACL
+     * Adds an "allow" rule to the ACL.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string|array   $roles
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
@@ -338,7 +338,7 @@ class Permissions
     }
 
     /**
-     * Removes "allow" permissions from the ACL
+     * Removes "allow" permissions from the ACL.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string         $role
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
@@ -356,7 +356,7 @@ class Permissions
     }
 
     /**
-     * Adds a "deny" rule to the ACL
+     * Adds a "deny" rule to the ACL.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string         $roles
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resources
@@ -374,7 +374,7 @@ class Permissions
     }
 
     /**
-     * Removes "deny" restrictions from the ACL
+     * Removes "deny" restrictions from the ACL.
      *
      * @param Zend\Permissions\Acl\Role\RoleInterface|string         $roles
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resources
