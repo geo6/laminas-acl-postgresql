@@ -1,27 +1,27 @@
+# [Zend Permissions ACL](https://docs.zendframework.com/zend-permissions-acl/) with [PostgreSQL](https://www.postgresql.org/)
+
 [![Latest Stable Version](https://poser.pugx.org/geo6/zend-acl-postgresql/v/stable)](https://packagist.org/packages/geo6/zend-acl-postgresql)
 [![Total Downloads](https://poser.pugx.org/geo6/zend-acl-postgresql/downloads)](https://packagist.org/packages/geo6/zend-acl-postgresql)
 [![Monthly Downloads](https://poser.pugx.org/geo6/zend-acl-postgresql/d/monthly.png)](https://packagist.org/packages/geo6/zend-acl-postgresql)
-
-# [Zend Permissions ACL](https://docs.zendframework.com/zend-permissions-acl/) with [PostgreSQL](https://www.postgresql.org/)
 
 ## Install
 
     composer require geo6/zend-acl-postgresql
 
-### Database structure
+## Database structure
 
 See [INSTALL.md](./INSTALL.md)
 
 > For the purposes of this documentation:
 >
->    a **resource** is an object to which access is controlled.
->    a **role** is an object that may request access to a **resource**.
+> - a **resource** is an object to which access is controlled.
+> - a **role** is an object that may request access to a **resource**.
 >
 > Put simply, **roles request access to resources**. For example, if a parking attendant requests access to a car, then the parking attendant is the requesting role, and the car is the resource, since access to the car may not be granted to everyone.
 >
 > --- <https://docs.zendframework.com/zend-permissions-acl/usage/>
 
-#### Table `resource`
+### Table `resource`
 
 | Column name | Column description |
 |-------------|--------------------|
@@ -31,7 +31,7 @@ See [INSTALL.md](./INSTALL.md)
 | locked | `bool` Allows to deny access to the resource for everyone |
 | public | `bool` Allows to set the resource accessible to everyone - even without login |
 
-#### Table `role`
+### Table `role`
 
 | Column name | Column description |
 |-------------|--------------------|
@@ -39,10 +39,10 @@ See [INSTALL.md](./INSTALL.md)
 | name | Name of the role |
 | priority | `int` Priority of the resource - Rules will be applied following the priority |
 
-A "special" role is created by default : `admin` !  
+A "special" role is created by default : `admin` !
 This role will have automatically access to every new resource created.
 
-#### Table `user`
+### Table `user`
 
 | Column name | Column description |
 |-------------|--------------------|
@@ -54,10 +54,10 @@ This role will have automatically access to every new resource created.
 | home | `int` Identifier resource used to be the homepage of the user. The user will be automatically redirected to his/her homepage once logged in. |
 | locked | `bool` Allows to deny access to everything for this user. The user won't be able to log in. |
 
-#### Table `role_resource`
+### Table `role_resource`
 
 Grant access for a role to a resource.
 
-#### Table `user_role`
+### Table `user_role`
 
 Assign a user to a role.
