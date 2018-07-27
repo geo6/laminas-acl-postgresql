@@ -175,19 +175,21 @@ class Permissions
                 if ($this->login !== 'anonymous') {
                     Log::write(
                         $this->logfile,
-                        'Access to resource "{resource}" is denied for user "{login}".',
+                        'Access to resource "{resource}" ({privilege}) is denied for user "{login}".',
                         [
-                            'resource' => $resource,
-                            'login'    => $this->login,
+                            'resource'  => $resource,
+                            'privilege' => $privilege,
+                            'login'     => $this->login,
                         ],
                         Logger::WARN
                     );
                 } else {
                     Log::write(
                         $this->logfile,
-                        'Access to resource "{resource}" is denied : no user logged in.',
+                        'Access to resource "{resource}" ({privilege}) is denied : no user logged in.',
                         [
                             'resource' => $resource,
+                            'privilege' => $privilege,
                         ],
                         Logger::WARN
                     );
