@@ -263,10 +263,11 @@ class Permissions
      *
      * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string                                                 $privilege
+     * @param bool                                                   $log       Enable logging
      *
      * @return bool
      */
-    public function isAllowed($resource, $privilege = null) : bool
+    public function isAllowed($resource, $privilege = null, $log = true) : bool
     {
         try {
             $is_allowed = $this->acl->isAllowed(
@@ -275,7 +276,7 @@ class Permissions
                 $privilege ?? 'connect'
             );
 
-            if ($is_allowed !== true && !is_null($this->_logfile)) {
+            if ($is_allowed !== true && $log === true && !is_null($this->_logfile)) {
                 if ($this->_login !== 'anonymous') {
                     Log::write(
                         $this->_logfile,
@@ -313,7 +314,7 @@ class Permissions
     /**
      * @see Pemission::isAllowed()
      */
-    public function isGranted($resource, $privilege = null) : bool
+    public function isGranted($resource, $privilege = null, $log = true) : bool
     {
         return $this->isAllowed($resource, $privilege);
     }
