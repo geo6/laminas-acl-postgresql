@@ -188,7 +188,7 @@ class Permissions
                         $this->logfile,
                         'Access to resource "{resource}" ({privilege}) is denied : no user logged in.',
                         [
-                            'resource' => $resource,
+                            'resource'  => $resource,
                             'privilege' => $privilege,
                         ],
                         Logger::WARN
