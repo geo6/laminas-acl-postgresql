@@ -1,10 +1,12 @@
-# Install PostgreSQL
+# Install
+
+## Install PostgreSQL
 
 <https://www.postgresql.org/download/>
 
-# Create tables
+## Create tables
 
-```
+```sql
 CREATE SCHEMA "access";
 
 CREATE TABLE "access"."resource" (
