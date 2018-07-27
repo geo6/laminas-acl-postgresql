@@ -12,6 +12,9 @@
         "zendframework/zend-session": "^2.8",
         "geo6/zend-log-filesystem": "dev-master"
     },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.3"
+    },
     "license": "GPL-3.0-or-later",
     "authors": [
         {
