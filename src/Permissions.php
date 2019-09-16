@@ -112,7 +112,7 @@ class Permissions
         foreach ($resources as $resource) {
             $this->acl->addResource(new Resource($resource->name));
 
-            if ($resource->public === true) {
+            if ($resource->public === true || $resource->public === 't') {
                 $this->acl->allow($this->_login, $resource->name, 'connect');
             }
         }
