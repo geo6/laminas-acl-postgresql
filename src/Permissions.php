@@ -161,7 +161,7 @@ class Permissions
     /**
      * @return array of registered roles
      */
-    public function getRoles() : array
+    public function getRoles(): array
     {
         return $this->acl->getRoles();
     }
@@ -169,7 +169,7 @@ class Permissions
     /**
      * @return array of registered resources
      */
-    public function getResources() : array
+    public function getResources(): array
     {
         return $this->acl->getResources();
     }
@@ -181,7 +181,7 @@ class Permissions
      *
      * @return bool
      */
-    public function hasRole($r) : bool
+    public function hasRole($r): bool
     {
         return $this->acl->hasRole($r);
     }
@@ -193,7 +193,7 @@ class Permissions
      *
      * @return bool
      */
-    public function hasResource($r) : bool
+    public function hasResource($r): bool
     {
         return $this->acl->hasResource($r);
     }
@@ -253,7 +253,7 @@ class Permissions
      *
      * @return bool
      */
-    public function isRole($r) : bool
+    public function isRole($r): bool
     {
         return $this->acl->inheritsRole(new Role($this->_login), $r);
     }
@@ -267,7 +267,7 @@ class Permissions
      *
      * @return bool
      */
-    public function isAllowed($resource, $privilege = null, $log = true) : bool
+    public function isAllowed($resource, $privilege = null, $log = true): bool
     {
         try {
             $is_allowed = $this->acl->isAllowed(
@@ -314,7 +314,7 @@ class Permissions
     /**
      * @see Pemission::isAllowed()
      */
-    public function isGranted($resource, $privilege = null, $log = true) : bool
+    public function isGranted($resource, $privilege = null, $log = true): bool
     {
         return $this->isAllowed($resource, $privilege);
     }
