@@ -1,24 +1,25 @@
 {
-    "name": "geo6/zend-acl-postgresql",
-    "description": "Zend Permissions ACL with PostgreSQL",
+    "name": "geo6/laminas-acl-postgresql",
     "type": "library",
-    "config": {
-        "sort-packages": true
-    },
+    "description": "Laminas Permissions ACL with PostgreSQL",
+    "license": "GPL-3.0-or-later",
     "require": {
-        "zendframework/zend-authentication": "^2.5",
-        "zendframework/zend-db": "^2.9",
-        "zendframework/zend-permissions-acl": "^2.6",
-        "zendframework/zend-session": "^2.8",
-        "geo6/zend-log-filesystem": "dev-master"
+        "geo6/laminas-log-filesystem": "^2.0",
+        "laminas/laminas-authentication": "^2.5",
+        "laminas/laminas-db": "^2.9",
+        "laminas/laminas-dependency-plugin": "^1.0",
+        "laminas/laminas-permissions-acl": "^2.6",
+        "laminas/laminas-session": "^2.8"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.3"
     },
-    "license": "GPL-3.0-or-later",
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
-            "Geo6\\Zend\\Permissions\\": "src/"
+            "Geo6\\Laminas\\Permissions\\": "src/"
         }
     }
 }

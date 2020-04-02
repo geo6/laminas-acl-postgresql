@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec4e33632857bb8cc13395b3be1b6a02",
+    "content-hash": "2ce8cbc6d2ca6638a1a495e76dd8981d",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -39,17 +39,17 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
-            "name": "geo6/zend-log-filesystem",
-            "version": "dev-master",
+            "name": "geo6/laminas-log-filesystem",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/geo6/laminas-log-filesystem.git",
-                "reference": "bad015b9202c3f3631971de3561c97e6939be289"
+                "reference": "26c5ee007823fc2061c3b854293bcc4e49060171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/geo6/laminas-log-filesystem/zipball/bad015b9202c3f3631971de3561c97e6939be289",
-                "reference": "bad015b9202c3f3631971de3561c97e6939be289",
+                "url": "https://api.github.com/repos/geo6/laminas-log-filesystem/zipball/26c5ee007823fc2061c3b854293bcc4e49060171",
+                "reference": "26c5ee007823fc2061c3b854293bcc4e49060171",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
                 "psr/http-message": "^1.0"
             },
             "replace": {
-                "geo6/zend-log-filesystem": "v1.0"
+                "geo6/zend-log-filesystem": "self.version"
             },
             "type": "library",
             "autoload": {
@@ -74,8 +74,7 @@
                 "GPL-3.0-or-later"
             ],
             "description": "Laminas Log stored in a file",
-            "abandoned": "geo6/laminas-log-filesystem",
-            "time": "2020-04-01T08:50:58+00:00"
+            "time": "2020-03-25T16:52:45+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -262,6 +261,68 @@
             "time": "2019-12-31T16:14:48+00:00"
         },
         {
+            "name": "laminas/laminas-db",
+            "version": "2.11.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-db.git",
+                "reference": "6c4238918b9204db1eb8cafae2c1940d40f4c007"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/6c4238918b9204db1eb8cafae2c1940d40f4c007",
+                "reference": "6c4238918b9204db1eb8cafae2c1940d40f4c007",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0"
+            },
+            "replace": {
+                "zendframework/zend-db": "^2.11.0"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-hydrator": "^1.1 || ^2.1 || ^3.0",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14"
+            },
+            "suggest": {
+                "laminas/laminas-eventmanager": "Laminas\\EventManager component",
+                "laminas/laminas-hydrator": "Laminas\\Hydrator component for using HydratingResultSets",
+                "laminas/laminas-servicemanager": "Laminas\\ServiceManager component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.11.x-dev",
+                    "dev-develop": "2.12.x-dev"
+                },
+                "laminas": {
+                    "component": "Laminas\\Db",
+                    "config-provider": "Laminas\\Db\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Db\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Database abstraction layer, SQL abstraction, result set abstraction, and RowDataGateway and TableDataGateway implementations",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "db",
+                "laminas"
+            ],
+            "time": "2020-03-29T12:08:51+00:00"
+        },
+        {
             "name": "laminas/laminas-dependency-plugin",
             "version": "1.0.3",
             "source": {
@@ -438,6 +499,59 @@
                 "logging"
             ],
             "time": "2019-12-31T17:18:59+00:00"
+        },
+        {
+            "name": "laminas/laminas-permissions-acl",
+            "version": "2.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-permissions-acl.git",
+                "reference": "624567fe376a70e0bfb5aa8217d5afa13b9d6e61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-permissions-acl/zipball/624567fe376a70e0bfb5aa8217d5afa13b9d6e61",
+                "reference": "624567fe376a70e0bfb5aa8217d5afa13b9d6e61",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0"
+            },
+            "replace": {
+                "zendframework/zend-permissions-acl": "self.version"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5"
+            },
+            "suggest": {
+                "laminas/laminas-servicemanager": "To support Laminas\\Permissions\\Acl\\Assertion\\AssertionManager plugin manager usage"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7.x-dev",
+                    "dev-develop": "2.8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Permissions\\Acl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Provides a lightweight and flexible access control list (ACL) implementation for privileges management",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "acl",
+                "laminas"
+            ],
+            "time": "2019-12-31T17:37:23+00:00"
         },
         {
             "name": "laminas/laminas-servicemanager",
@@ -881,115 +995,6 @@
                 "psr-3"
             ],
             "time": "2020-03-23T09:12:05+00:00"
-        },
-        {
-            "name": "zendframework/zend-db",
-            "version": "2.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-db.git",
-                "reference": "71626f95f6f9ee326e4be3c34228c1c466300a2c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-db/zipball/71626f95f6f9ee326e4be3c34228c1c466300a2c",
-                "reference": "71626f95f6f9ee326e4be3c34228c1c466300a2c",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7.27 || ^6.5.14",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-hydrator": "^1.1 || ^2.1 || ^3.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
-            },
-            "suggest": {
-                "zendframework/zend-eventmanager": "Zend\\EventManager component",
-                "zendframework/zend-hydrator": "Zend\\Hydrator component for using HydratingResultSets",
-                "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.11.x-dev",
-                    "dev-develop": "2.12.x-dev"
-                },
-                "zf": {
-                    "component": "Zend\\Db",
-                    "config-provider": "Zend\\Db\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Db\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Database abstraction layer, SQL abstraction, result set abstraction, and RowDataGateway and TableDataGateway implementations",
-            "keywords": [
-                "ZendFramework",
-                "db",
-                "zf"
-            ],
-            "abandoned": "laminas/laminas-db",
-            "time": "2019-12-31T19:43:46+00:00"
-        },
-        {
-            "name": "zendframework/zend-permissions-acl",
-            "version": "2.7.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-permissions-acl.git",
-                "reference": "1323e30a9357e6f6956f63d97faf7e8c8db1f4f8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-permissions-acl/zipball/1323e30a9357e6f6956f63d97faf7e8c8db1f4f8",
-                "reference": "1323e30a9357e6f6956f63d97faf7e8c8db1f4f8",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
-                "zendframework/zend-coding-standard": "~1.0.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
-            },
-            "suggest": {
-                "zendframework/zend-servicemanager": "To support Zend\\Permissions\\Acl\\Assertion\\AssertionManager plugin manager usage"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7.x-dev",
-                    "dev-develop": "2.8.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Permissions\\Acl\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Provides a lightweight and flexible access control list (ACL) implementation for privileges management",
-            "keywords": [
-                "ZendFramework",
-                "acl",
-                "zf"
-            ],
-            "abandoned": "laminas/laminas-permissions-acl",
-            "time": "2019-06-25T08:09:22+00:00"
         }
     ],
     "packages-dev": [
@@ -1047,9 +1052,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "geo6/zend-log-filesystem": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

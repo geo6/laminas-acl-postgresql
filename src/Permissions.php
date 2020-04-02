@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Zend\Permissions package.
+ * This file is part of the Laminas\Permissions package.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,17 +12,17 @@
 
 declare(strict_types=1);
 
-namespace Geo6\Zend\Permissions;
+namespace Geo6\Laminas\Permissions;
 
-use Geo6\Zend\Log\Log;
-use Zend\Authentication\AuthenticationService;
-use Zend\Db\Adapter\Adapter as DbAdapter;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Sql\TableIdentifier;
-use Zend\Log\Logger;
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Geo6\Laminas\Log\Log;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\Db\Adapter\Adapter as DbAdapter;
+use Laminas\Db\Sql\Sql;
+use Laminas\Db\Sql\TableIdentifier;
+use Laminas\Log\Logger;
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Resource\GenericResource as Resource;
+use Laminas\Permissions\Acl\Role\GenericRole as Role;
 
 /**
  * Enable the use of Zend Framework ACL using PostgreSQL.
@@ -40,7 +40,7 @@ class Permissions
     private $_logfile = null;
 
     /**
-     * @param Zend\Db\Adapter\Adapter $dbAdapter Database connection
+     * @param Laminas\Db\Adapter\Adapter $dbAdapter Database connection
      * @param string                  $schema    Database schema
      * @param string                  $logfile   Path to logfile
      */
@@ -177,7 +177,7 @@ class Permissions
     /**
      * Returns true if and only if the Role exists in the registry.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string $role
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string $role
      *
      * @return bool
      */
@@ -189,7 +189,7 @@ class Permissions
     /**
      * Returns true if and only if the Resource exists in the ACL.
      *
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      *
      * @return bool
      */
@@ -249,7 +249,7 @@ class Permissions
     /**
      * Returns true if and only if current user inherits from $role.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string $role
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string $role
      *
      * @return bool
      */
@@ -261,7 +261,7 @@ class Permissions
     /**
      * Returns true if and only if the current user has access to the Resource.
      *
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string                                                 $privilege
      * @param bool                                                   $log       Enable logging
      *
@@ -322,11 +322,11 @@ class Permissions
     /**
      * Adds an "allow" rule to the ACL.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string|array   $roles
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string|array   $roles
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string|array                                           $privileges
      *
-     * @return Zend\Permissions\Acl
+     * @return Laminas\Permissions\Acl
      */
     public function allowPrivilege($role, $resource, $privileges)
     {
@@ -340,11 +340,11 @@ class Permissions
     /**
      * Removes "allow" permissions from the ACL.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string         $role
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resource
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $role
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string|array                                           $privileges
      *
-     * @return Zend\Permissions\Acl
+     * @return Laminas\Permissions\Acl
      */
     public function removeAllowPrivilege($role, $resource, $privileges)
     {
@@ -358,11 +358,11 @@ class Permissions
     /**
      * Adds a "deny" rule to the ACL.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string         $roles
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resources
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
      * @param string|array                                           $privileges
      *
-     * @return Zend\Permissions\Acl
+     * @return Laminas\Permissions\Acl
      */
     public function denyPrivilege($role, $resource, $privileges)
     {
@@ -376,11 +376,11 @@ class Permissions
     /**
      * Removes "deny" restrictions from the ACL.
      *
-     * @param Zend\Permissions\Acl\Role\RoleInterface|string         $roles
-     * @param Zend\Permissions\Acl\Resource\ResourceInterface|string $resources
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
      * @param string|array                                           $privileges
      *
-     * @return Zend\Permissions\Acl
+     * @return Laminas\Permissions\Acl
      */
     public function removeDenyPrivilege($role, $resource, $privileges)
     {
