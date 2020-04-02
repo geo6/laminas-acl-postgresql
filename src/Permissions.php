@@ -41,8 +41,8 @@ class Permissions
 
     /**
      * @param Laminas\Db\Adapter\Adapter $dbAdapter Database connection
-     * @param string                  $schema    Database schema
-     * @param string                  $logfile   Path to logfile
+     * @param string                     $schema    Database schema
+     * @param string                     $logfile   Path to logfile
      */
     public function __construct(
         DbAdapter $dbAdapter,
@@ -262,8 +262,8 @@ class Permissions
      * Returns true if and only if the current user has access to the Resource.
      *
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
-     * @param string                                                 $privilege
-     * @param bool                                                   $log       Enable logging
+     * @param string                                                    $privilege
+     * @param bool                                                      $log       Enable logging
      *
      * @return bool
      */
@@ -324,7 +324,7 @@ class Permissions
      *
      * @param Laminas\Permissions\Acl\Role\RoleInterface|string|array   $roles
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
-     * @param string|array                                           $privileges
+     * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
      */
@@ -342,7 +342,7 @@ class Permissions
      *
      * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $role
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
-     * @param string|array                                           $privileges
+     * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
      */
@@ -360,7 +360,7 @@ class Permissions
      *
      * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
-     * @param string|array                                           $privileges
+     * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
      */
@@ -378,7 +378,7 @@ class Permissions
      *
      * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
-     * @param string|array                                           $privileges
+     * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
      */
