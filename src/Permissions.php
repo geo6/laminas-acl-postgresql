@@ -1,19 +1,10 @@
 <?php
-/**
- * This file is part of the Laminas\Permissions package.
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * PHP version 7
- *
- * @license GPL License
- */
 
 declare(strict_types=1);
 
 namespace Geo6\Laminas\Permissions;
 
+use Exception;
 use Geo6\Laminas\Log\Log;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\Db\Adapter\Adapter as DbAdapter;
@@ -23,46 +14,59 @@ use Laminas\Log\Logger;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource as Resource;
 use Laminas\Permissions\Acl\Role\GenericRole as Role;
+use Mezzio\Authentication\DefaultUser;
+use Mezzio\Authentication\UserInterface;
 
 /**
  * Enable the use of Zend Framework ACL using PostgreSQL.
  *
- * @author Jonathan Beliën <jbe@geo6.be>
- *
- * @link https://docs.zendframework.com/zend-permissions-acl/
+ * @link https://docs.laminas.dev/laminas-permissions-acl/
  */
 class Permissions
 {
     public $acl = null;
+
     private $_dbAdapter = null;
-    private $_schema = null;
-    private $_login = null;
     private $_logfile = null;
+    private $_login = null;
+    private $_schema = null;
+    private $_tables = null;
+    private $_user = null;
 
     /**
      * @param Laminas\Db\Adapter\Adapter $dbAdapter Database connection
      * @param string                     $schema    Database schema
+     * @param array                      $tables    Database ACL tables
      * @param string                     $logfile   Path to logfile
      */
     public function __construct(
         DbAdapter $dbAdapter,
-        string $schema = null,
-        string $logfile = null
+        ?string $schema = null,
+        ?array $tables = null,
+        ?string $logfile = null
     ) {
         $auth = new AuthenticationService();
-        $this->_login = ($auth->hasIdentity() ? $auth->getIdentity() : 'anonymous');
+        if ($auth->hasIdentity() === true) {
+            $this->_login = $auth->getIdentity();
+        } elseif (isset($_SESSION[UserInterface::class])) {
+            $user = $_SESSION[UserInterface::class];
+
+            $this->_user = new DefaultUser($user['username'], $user['roles'] ?? [], $user['details'] ?? []);
+            $this->_login = $this->_user->getIdentity();
+        }
 
         $this->_logfile = $logfile;
 
         $this->_dbAdapter = $dbAdapter;
-        $this->_schema = $schema;
+        $this->_schema = is_null($schema) ? 'public' : $schema;
+        $this->_tables = is_null($tables) ? [] : $tables;
 
         $this->acl = new Acl();
 
         $sql = new Sql($this->_dbAdapter);
 
         // Roles
-        $select = $sql->select(new TableIdentifier('role', $this->_schema));
+        $select = $sql->select(new TableIdentifier($this->_tables['role'] ?? 'role', $this->_schema));
         $select->columns(['name']);
         $select->order(['name']);
 
@@ -75,20 +79,20 @@ class Permissions
         }
 
         // Apply roles to user
-        $select = $sql->select(new TableIdentifier('user', $this->_schema));
+        $select = $sql->select(['u' => new TableIdentifier($this->_tables['user'] ?? 'user', $this->_schema)]);
         $select->join(
-            new TableIdentifier('user_role', $this->_schema),
-            'user.id = user_role.id_user',
+            ['ur' => new TableIdentifier($this->_tables['user_role'] ?? 'user_role', $this->_schema)],
+            'u.id = ur.id_user',
             []
         );
         $select->join(
-            new TableIdentifier('role', $this->_schema),
-            'user_role.id_role = role.id',
+            ['r' => new TableIdentifier($this->_tables['role'] ?? 'role', $this->_schema)],
+            'ur.id_role = r.id',
             ['name']
         );
         $select->columns([]);
-        $select->where(['user.login' => $this->_login]);
-        $select->order(['role.priority']);
+        $select->where(['u.login' => $this->_login]);
+        $select->order(['r.priority']);
 
         $parents = [];
         $roles = $this->_dbAdapter->query(
@@ -101,8 +105,8 @@ class Permissions
         $this->acl->addRole(new Role($this->_login), $parents);
 
         // Resources
-        $select = $sql->select(new TableIdentifier('resource', $this->_schema));
-        $select->columns(['name', 'public']);
+        $select = $sql->select(new TableIdentifier($this->_tables['resource'] ?? 'resource', $this->_schema));
+        $select->columns(['name'/*, 'public'*/]);
         $select->order(['name']);
 
         $resources = $this->_dbAdapter->query(
@@ -112,49 +116,49 @@ class Permissions
         foreach ($resources as $resource) {
             $this->acl->addResource(new Resource($resource->name));
 
-            if ($resource->public === true || $resource->public === 't') {
-                $this->acl->allow($this->_login, $resource->name, 'connect');
-            }
+            // if ($resource->public === true || $resource->public === 't') {
+            //     $this->acl->allow($this->_login, $resource->name, 'connect');
+            // }
         }
 
         // Permissions
-        $select = $sql->select(new TableIdentifier('role_resource', $this->_schema));
+        $select = $sql->select(['rr' => new TableIdentifier($this->_tables['role_resource'] ?? 'role_resource', $this->_schema)]);
         $select->join(
-            new TableIdentifier('role', $this->_schema),
-            'role_resource.id_role = role.id',
+            ['ro' => new TableIdentifier($this->_tables['role'] ?? 'role', $this->_schema)],
+            'rr.id_role = ro.id',
             [
                 'role_name' => 'name',
             ]
         );
         $select->join(
-            new TableIdentifier('resource', $this->_schema),
-            'role_resource.id_resource = resource.id',
+            ['re' => new TableIdentifier($this->_tables['resource'] ?? 'resource', $this->_schema)],
+            'rr.id_resource = re.id',
             [
                 'resource_name'   => 'name',
-                'resource_locked' => 'locked',
+                // 'resource_locked' => 'locked',
             ]
         );
-        $select->columns(['locked']);
+        // $select->columns(['locked']);
 
         $permissions = $this->_dbAdapter->query(
             $sql->buildSqlString($select),
             DbAdapter::QUERY_MODE_EXECUTE
         );
         foreach ($permissions as $permission) {
-            if (($permission->locked === false || $permission->locked === 'f')
-                && ($permission->resource_locked === false || $permission->resource_locked === 'f')
-            ) {
-                $this->acl->allow(
-                    $permission->role_name,
-                    $permission->resource_name,
-                    ($permission->role_name !== 'admin' ? 'connect' : null)
-                );
-            } else {
-                $this->acl->deny(
-                    $permission->role_name,
-                    $permission->resource_name
-                );
-            }
+            // if (($permission->locked === false || $permission->locked === 'f')
+            //     && ($permission->resource_locked === false || $permission->resource_locked === 'f')
+            // ) {
+            $this->acl->allow(
+                $permission->role_name,
+                $permission->resource_name,
+                // ($permission->role_name !== 'admin' ? 'connect' : null)
+            );
+            // } else {
+            //     $this->acl->deny(
+            //         $permission->role_name,
+            //         $permission->resource_name
+            //     );
+            // }
         }
     }
 
@@ -181,9 +185,9 @@ class Permissions
      *
      * @return bool
      */
-    public function hasRole($r): bool
+    public function hasRole($role): bool
     {
-        return $this->acl->hasRole($r);
+        return $this->acl->hasRole($role);
     }
 
     /**
@@ -193,9 +197,9 @@ class Permissions
      *
      * @return bool
      */
-    public function hasResource($r): bool
+    public function hasResource($resource): bool
     {
-        return $this->acl->hasResource($r);
+        return $this->acl->hasResource($resource);
     }
 
     /**
@@ -203,15 +207,15 @@ class Permissions
      *
      * @param int|string $role
      */
-    public function getRole($r)
+    public function getRole($role)
     {
         $sql = new Sql($this->_dbAdapter);
 
-        $select = $sql->select(new TableIdentifier('role', $this->_schema));
-        if (is_int($r)) {
-            $select->where(['id' => $r]);
+        $select = $sql->select(new TableIdentifier($this->_tables['role'] ?? 'role', $this->_schema));
+        if (is_int($role)) {
+            $select->where(['id' => $role]);
         } else {
-            $select->where(['name' => $r]);
+            $select->where(['name' => $role]);
         }
 
         $q = $this->_dbAdapter->query(
@@ -225,17 +229,17 @@ class Permissions
     /**
      * Returns the identified Resource.
      *
-     * @param int|string $role
+     * @param int|string $resource
      */
-    public function getResource($r)
+    public function getResource($resource)
     {
         $sql = new Sql($this->_dbAdapter);
 
-        $select = $sql->select(new TableIdentifier('resource', $this->_schema));
-        if (is_int($r)) {
-            $select->where(['id' => $r]);
+        $select = $sql->select(new TableIdentifier($this->_tables['resource'] ?? 'resource', $this->_schema));
+        if (is_int($resource)) {
+            $select->where(['id' => $resource]);
         } else {
-            $select->where(['name' => $r]);
+            $select->where(['name' => $resource]);
         }
 
         $q = $this->_dbAdapter->query(
@@ -253,9 +257,9 @@ class Permissions
      *
      * @return bool
      */
-    public function isRole($r): bool
+    public function isRole($role): bool
     {
-        return $this->acl->inheritsRole(new Role($this->_login), $r);
+        return $this->acl->inheritsRole(new Role($this->_login), $role);
     }
 
     /**
@@ -277,7 +281,7 @@ class Permissions
             );
 
             if ($is_allowed !== true && $log === true && !is_null($this->_logfile)) {
-                if ($this->_login !== 'anonymous') {
+                if (!is_null($this->_login)) {
                     Log::write(
                         $this->_logfile,
                         'Access to resource "{resource}" ({privilege}) is denied for user "{login}".',
@@ -322,7 +326,7 @@ class Permissions
     /**
      * Adds an "allow" rule to the ACL.
      *
-     * @param Laminas\Permissions\Acl\Role\RoleInterface|string|array   $roles
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string|array   $role
      * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string|array                                              $privileges
      *
@@ -358,8 +362,8 @@ class Permissions
     /**
      * Adds a "deny" rule to the ACL.
      *
-     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
-     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $role
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
@@ -376,8 +380,8 @@ class Permissions
     /**
      * Removes "deny" restrictions from the ACL.
      *
-     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $roles
-     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resources
+     * @param Laminas\Permissions\Acl\Role\RoleInterface|string         $role
+     * @param Laminas\Permissions\Acl\Resource\ResourceInterface|string $resource
      * @param string|array                                              $privileges
      *
      * @return Laminas\Permissions\Acl
