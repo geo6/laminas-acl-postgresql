@@ -11,6 +11,9 @@
         "laminas/laminas-permissions-acl": "^2.6",
         "laminas/laminas-session": "^2.8"
     },
+    "replace": {
+        "geo6/zend-acl-postgresql": "v1.0"
+    },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.3"
     },
