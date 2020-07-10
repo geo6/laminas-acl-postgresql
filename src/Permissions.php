@@ -151,7 +151,7 @@ class Permissions
             $this->acl->allow(
                 $permission->role_name,
                 $permission->resource_name,
-                // ($permission->role_name !== 'admin' ? 'connect' : null)
+                'connect'
             );
             // } else {
             //     $this->acl->deny(
