@@ -839,16 +839,16 @@
         },
         {
             "name": "mezzio/mezzio-authentication",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mezzio/mezzio-authentication.git",
-                "reference": "24344b06a9598654ce3fde25c0210c4b494dd3c5"
+                "reference": "c0fb597537ba4f3ef44ad02ff6a6732947c0622e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mezzio/mezzio-authentication/zipball/24344b06a9598654ce3fde25c0210c4b494dd3c5",
-                "reference": "24344b06a9598654ce3fde25c0210c4b494dd3c5",
+                "url": "https://api.github.com/repos/mezzio/mezzio-authentication/zipball/c0fb597537ba4f3ef44ad02ff6a6732947c0622e",
+                "reference": "c0fb597537ba4f3ef44ad02ff6a6732947c0622e",
                 "shasum": ""
             },
             "require": {
@@ -911,7 +911,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2020-10-20T18:56:01+00:00"
+            "time": "2020-11-03T20:58:11+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
