@@ -7,7 +7,7 @@
         "geo6/laminas-log-filesystem": "^2.0",
         "laminas/laminas-authentication": "^2.5",
         "laminas/laminas-db": "^2.9",
-        "laminas/laminas-dependency-plugin": "^1.0",
+        "laminas/laminas-dependency-plugin": "^1.0 || ^2.0",
         "laminas/laminas-permissions-acl": "^2.6",
         "laminas/laminas-session": "^2.8",
         "mezzio/mezzio-authentication": "^1.1"
